@@ -154,7 +154,7 @@ class MySQL(metaclass=SingletonMetaClass):
             engine_or_conn,
         )
 
-
+import time
 class SQLAlchemy(metaclass=SingletonMetaClass):
     def __init__(self):
         self.is_test_mode: bool = False
@@ -173,8 +173,15 @@ class SQLAlchemy(metaclass=SingletonMetaClass):
             + f"{config.mysql_host}/{config.mysql_database}@{config.mysql_user}"
         )
 
-        if not database_exists(config.mysql_root_url):
-            create_database(config.mysql_root_url)
+        while True:
+            try:
+                if not database_exists(config.mysql_root_url):
+                    create_database(config.mysql_root_url)
+                break
+            except Exception:
+                print("Retrying to Connect to DB")
+                time.sleep(60)
+                continue
 
         self.root_engine = create_engine(config.mysql_root_url, echo=config.db_echo)
         with self.root_engine.connect() as conn:

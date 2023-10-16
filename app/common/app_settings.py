@@ -118,7 +118,6 @@ async def on_shutdown():
     await cache.close()
     ApiLogger.ccritical("DB & CACHE connection closed!")
 
-
 def create_app(config: Config) -> FastAPI:
     """
     Creates and configures the FastAPI application.
@@ -153,7 +152,7 @@ def create_app(config: Config) -> FastAPI:
     )
     db.start(config=config)
     cache.start(config=config)
-    js_url_initializer(js_location="app/web/main.dart.js")
+    #js_url_initializer(js_location="app/web/main.dart.js")
 
     # Admin
     if db.engine is not None:
